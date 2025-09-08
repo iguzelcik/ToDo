@@ -8,6 +8,9 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Arr;
+
+
 
 
 class AuthenticatedSessionController extends Controller
@@ -18,17 +21,21 @@ class AuthenticatedSessionController extends Controller
     }
     public function store(LoginRequest $request): RedirectResponse
     {
-       
-        $credentials = $request->only('email', 'password');
+        // Validation sonrası verileri al
+    $validatedData = $request->validated();
 
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
-            return redirect()->route('todos.index');
-        }
+    $credentials = Arr::only($validatedData, ['email', 'password']);
 
-        return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
-        ])->onlyInput('email');
+    if (Auth::attempt($credentials)) {
+        // session helper kullanarak
+        session()->regenerate();
+
+        return redirect()->route('todos.index');
+    }
+
+    return back()->withErrors([
+        'email' => 'The provided credentials do not match our records.',
+    ])->onlyInput('email');
     }
     public function destroy(Request $request): RedirectResponse
     {

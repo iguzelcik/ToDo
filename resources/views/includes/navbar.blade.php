@@ -31,6 +31,33 @@
         <input class="form-control me-2" type="search" placeholder="Search ToDo" aria-label="Search" name="search" value="{{ request('search') }}">
         <button class="btn btn-outline-success" type="submit">Search</button>
       </form>
+     <ul class="navbar-nav ms-3">
+    @auth
+        <!-- Kullanıcı giriş yapmışsa -->
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                {{ auth()->user()->name }}
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="{{ route('profile.edit') }}">Profile</a></li>
+                <li>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="dropdown-item">Logout</button>
+                    </form>
+                </li>
+            </ul>
+        </li>
+    @endauth
+
+    @guest
+        <!-- Kullanıcı giriş yapmamışsa -->
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('login') }}">Login</a>
+        </li>
+    @endguest
+</ul>
+
     </div>
   </div>
 </nav>

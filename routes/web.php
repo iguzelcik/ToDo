@@ -14,15 +14,20 @@ Route::get('/', [TodoController::class, 'index'])->name('todos.index');
 //Route::put('/categories/{category}', [CategoryController::class, 'update'])->name('categories.update');
 //Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])->name('categories.destroy');
 
-Route::resource('categories', CategoryController::class);
-Route::resource('todos', TodoController::class);
-Route::put('/todos/{todo}/check', [TodoController::class, 'check'])->name('todos.check');
+Route::middleware('auth')->group(function () {
+    Route::resource('categories', CategoryController::class);
+    Route::resource('todos', TodoController::class);
+    Route::put('/todos/{todo}/check', [TodoController::class, 'check'])->name('todos.check');
+    Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+    Route::post('/profile', [AuthenticatedSessionController::class, 'profile'])->name('profile.edit');
+});
 
-Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login.create');
-Route::post('/login', [AuthenticatedSessionController::class, 'store'])->name('login.store');
-//Route::post('/login', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
+    Route::post('/login', [AuthenticatedSessionController::class, 'store'])->name('login.store');
+    Route::get('/register', [RegisteredUserController::class, 'create'])->name('register.create');
+    Route::post('/register', [RegisteredUserController::class, 'store'])->name('register.store');
+});
 
-Route::get('/register', [RegisteredUserController::class, 'create'])->name('register.create');
-Route::post('/register', [RegisteredUserController::class, 'store'])->name('register.store');
 
 
