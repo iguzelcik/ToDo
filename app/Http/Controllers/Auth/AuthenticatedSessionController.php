@@ -7,8 +7,8 @@ use App\Http\Requests\LoginRequest;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Auth;
+
 
 class AuthenticatedSessionController extends Controller
 {
@@ -16,13 +16,13 @@ class AuthenticatedSessionController extends Controller
     {
         return view('pages.auth.login');
     }
-    public function store(Request $request):RedirectResponse
+    public function store(LoginRequest $request): RedirectResponse
     {
        
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
-           $request->session()->regenerate();
+            $request->session()->regenerate();
             return redirect()->route('todos.index');
         }
 

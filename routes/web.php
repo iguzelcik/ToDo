@@ -25,3 +25,4 @@ Route::post('/login', [AuthenticatedSessionController::class, 'store'])->name('l
 Route::get('/register', [RegisteredUserController::class, 'create'])->name('register.create');
 Route::post('/register', [RegisteredUserController::class, 'store'])->name('register.store');
 
+
