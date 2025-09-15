@@ -4,7 +4,7 @@ use App\Http\Controllers\CategoryController;
 use \App\Http\Controllers\TodoController;
 use \App\Http\Controllers\Auth\AuthenticatedSessionController;
 use \App\Http\Controllers\Auth\RegisteredUserController;
-Route::get('/', [TodoController::class, 'index'])->name('todos.index');
+
 
 //Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
 //Route::get('/categories/create', [CategoryController::class, 'create'])->name('categories.create');
@@ -15,6 +15,7 @@ Route::get('/', [TodoController::class, 'index'])->name('todos.index');
 //Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])->name('categories.destroy');
 
 Route::middleware('auth')->group(function () {
+    Route::get('/', [TodoController::class, 'index'])->name('todos.index');
     Route::resource('categories', CategoryController::class);
     Route::resource('todos', TodoController::class);
     Route::put('/todos/{todo}/check', [TodoController::class, 'check'])->name('todos.check');
